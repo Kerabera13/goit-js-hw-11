@@ -56,7 +56,14 @@ function renderGallery(images) {
       title: "Info",
       message:
         "Sorry, there are no images matching your search query. Please try again!",
-      backgroundColor: "#FF0000",
+      backgroundColor: "#EF4040",
+      position: 'bottomRight', 
+      messageColor: '#fff',
+      messageSize: '16px',
+      timeout: 5000, 
+      maxWidth: 400, 
+      transitionIn: 'fadeInLeft', 
+      transitionOut: 'fadeOut', 
     });
     return;
   }
