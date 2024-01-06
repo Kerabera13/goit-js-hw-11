@@ -13,7 +13,7 @@ const loader = document.querySelector(".loader");
 
 form.addEventListener("submit", handleFormSubmit);
 
-async function handleFormSubmit(event) {
+function handleFormSubmit(event) {
   event.preventDefault();
 
   const searchQuery = input.value.trim();
@@ -24,28 +24,30 @@ async function handleFormSubmit(event) {
 
   showLoader();
 
-  try {
-    const images = await fetchImages(searchQuery);
-    renderGallery(images);
-  } catch (error) {
-    handleError(error);
-  } finally {
-    hideLoader();
-    form.reset();
-  }
+  fetchImages(searchQuery)
+    .then(images => {
+      renderGallery(images);
+    })
+    .catch(error => {
+      handleError(error);
+    })
+    .finally(() => {
+      hideLoader();
+      form.reset();
+    });
 }
 
-async function fetchImages(query) {
+function fetchImages(query) {
   const url = `https://pixabay.com/api/?key=${apiKey}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true`;
 
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-
-  const data = await response.json();
-  return data.hits;
+  return fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then(data => data.hits);
 }
 
 function renderGallery(images) {
